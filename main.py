@@ -4,10 +4,9 @@ import os
 
 # --- CONFIG ---
 TOKEN = os.getenv("BOT_TOKEN")
-# Your GitHub script
-MY_SCRIPT = 'loadstring(game:HttpGet("[https://raw.githubusercontent.com/CStudios-Dev/csLoader.lua/main/CSLoader.lua](https://raw.githubusercontent.com/CStudios-Dev/csLoader.lua/main/CSLoader.lua)"))()'
-# Your new purple logo link
-IMAGE_URL = "[https://cdn.discordapp.com/attachments/1424784310418014360/1456699055244710094/Screenshot_2026-01-03-01-19-35-95_680d03679600f7af0b4c700c6b270fe7.jpg](https://cdn.discordapp.com/attachments/1424784310418014360/1456699055244710094/Screenshot_2026-01-03-01-19-35-95_680d03679600f7af0b4c700c6b270fe7.jpg)" 
+MY_SCRIPT = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/CStudios-Dev/csLoader.lua/main/CSLoader.lua"))()'
+# Use your updated purple logo link
+IMAGE_URL = "https://cdn.discordapp.com/attachments/1424784310418014360/1456699055244710094/Screenshot_2026-01-03-01-19-35-95_680d03679600f7af0b4c700c6b270fe7.jpg" 
 # --------------
 
 intents = discord.Intents.default()
@@ -21,22 +20,20 @@ class Menu(discord.ui.View):
 
     @discord.ui.button(label="Mobile Copy", style=discord.ButtonStyle.secondary, emoji="🟣")
     async def copy_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        # We removed the ``` so it copies the raw text only
-        # Sending as a 'hidden' message so only you see it
+        # Sends raw script for 1-tap copy on mobile
         await interaction.response.send_message(content=MY_SCRIPT, ephemeral=True)
 
 @bot.command()
 async def loader(ctx):
-    # Purple Embed
     embed = discord.Embed(
-        title="Zenith Studios Loader", 
+        title="Carbon Studios Loader", 
         description=f"```lua\n{MY_SCRIPT}```",
-        color=0x8A2BE2 
+        color=0x8A2BE2  # Exact Purple
     )
     embed.set_thumbnail(url=IMAGE_URL)
     embed.add_field(
         name="Mobile Instructions", 
-        value="1. Tap the **Mobile Copy** button.\n2. Long-press the hidden message that appears.\n3. Tap **Copy Text**.", 
+        value="1. Tap **Mobile Copy**.\n2. Long-press the hidden message.\n3. Tap **Copy Text**.", 
         inline=False
     )
     await ctx.send(embed=embed, view=Menu())
@@ -48,5 +45,3 @@ async def on_ready():
 
 if TOKEN:
     bot.run(TOKEN)
-else:
-    print("Error: BOT_TOKEN Environment Variable is missing!")
