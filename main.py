@@ -3,10 +3,11 @@ from discord.ext import commands
 import os
 
 # --- CONFIG ---
-# This line tells the bot to get the token from Render's secret settings
 TOKEN = os.getenv("BOT_TOKEN")
-MY_SCRIPT = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/CStudios-Dev/csLoader.lua/main/CSLoader.lua"))()'
-IMAGE_URL = "https://cdn.discordapp.com/attachments/1424784310418014360/1456699055244710094/Screenshot_2026-01-03-01-19-35-95_680d03679600f7af0b4c700c6b270fe7.jpg?ex=69595036&is=6957feb6&hm=8e65651ca769482e0e5b7b0524bc2a25960b2fc963aab2f12012fb597f683cd4&" 
+# Your GitHub script
+MY_SCRIPT = 'loadstring(game:HttpGet("[https://raw.githubusercontent.com/CStudios-Dev/csLoader.lua/main/CSLoader.lua](https://raw.githubusercontent.com/CStudios-Dev/csLoader.lua/main/CSLoader.lua)"))()'
+# Your new purple logo link
+IMAGE_URL = "[https://cdn.discordapp.com/attachments/1424784310418014360/1456699055244710094/Screenshot_2026-01-03-01-19-35-95_680d03679600f7af0b4c700c6b270fe7.jpg](https://cdn.discordapp.com/attachments/1424784310418014360/1456699055244710094/Screenshot_2026-01-03-01-19-35-95_680d03679600f7af0b4c700c6b270fe7.jpg)" 
 # --------------
 
 intents = discord.Intents.default()
@@ -20,19 +21,22 @@ class Menu(discord.ui.View):
 
     @discord.ui.button(label="Mobile Copy", style=discord.ButtonStyle.secondary, emoji="🟣")
     async def copy_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message(f"```{MY_SCRIPT}```", ephemeral=True)
+        # We removed the ``` so it copies the raw text only
+        # Sending as a 'hidden' message so only you see it
+        await interaction.response.send_message(content=MY_SCRIPT, ephemeral=True)
 
 @bot.command()
 async def loader(ctx):
+    # Purple Embed
     embed = discord.Embed(
-        title="Carbon Studios Loader", 
-        description=f"```{MY_SCRIPT}```",
+        title="Zenith Studios Loader", 
+        description=f"```lua\n{MY_SCRIPT}```",
         color=0x8A2BE2 
     )
     embed.set_thumbnail(url=IMAGE_URL)
     embed.add_field(
         name="Mobile Instructions", 
-        value="Tap the **Mobile Copy** button below. A hidden message will appear for you to copy.", 
+        value="1. Tap the **Mobile Copy** button.\n2. Long-press the hidden message that appears.\n3. Tap **Copy Text**.", 
         inline=False
     )
     await ctx.send(embed=embed, view=Menu())
@@ -42,8 +46,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name="!loader"))
     print(f"Logged in as {bot.user}")
 
-# Error handling if token is missing
 if TOKEN:
     bot.run(TOKEN)
 else:
-    print("ERROR: BOT_TOKEN not found in Environment Variables!")
+    print("Error: BOT_TOKEN Environment Variable is missing!")
